@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Big Red Board | Nebraska Football Recruiting</title>
+    <style>
+        body { font-family: system-ui, sans-serif; max-width: 900px; margin: 40px auto; padding: 0 20px; background: #f9f9f9; }
+        h1 { color: #d00000; margin-bottom: 4px; }
+        p { color: #555; margin-top: 0; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; background: white; box-shadow: 0 2px 6px rgba(0,0,0,0.08); }
+        th, td { padding: 14px; border-bottom: 1px solid #eee; text-align: left; }
+        th { background: #111; color: white; }
+        .committed { color: #d00000; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <h1>Big Red Board</h1>
+    <p>Nebraska Football Recruiting Tracker</p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Player</th>
+                <th>Pos</th>
+                <th>Class</th>
+                <th>High School</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody id="board-body"></tbody>
+    </table>
+
+    <script>
+        fetch('/api/recruits')
+            .then(res => res.json())
+            .then(recruits => {
+                const tbody = document.getElementById('board-body');
+                tbody.innerHTML = recruits.map(r => `
+                    <tr>
+                        <td><strong>${r.name}</strong> (${r.state})</td>
+                        <td>${r.position}</td>
+                        <td>${r.gradClass}</td>
+                        <td>${r.highSchool || '-'}</td>
+                        <td class="${r.committed ? 'committed' : ''}">${r.status}</td>
+                    </tr>
+                `).join('');
+            });
+    </script>
+</body>
+</html>
